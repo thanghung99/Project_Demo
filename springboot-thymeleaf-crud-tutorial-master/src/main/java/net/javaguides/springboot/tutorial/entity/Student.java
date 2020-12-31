@@ -1,11 +1,10 @@
 package net.javaguides.springboot.tutorial.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -23,9 +22,27 @@ public class Student {
     @Column(name = "email")
     private String email;
 
+
     @Column(name = "phone_no")
     private long phoneNo;
-    
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_lop")
+    private Lop lop;
+
+    public Lop getLop() {
+        return lop;
+    }
+
+    public void setLop(Lop lop) {
+        this.lop = lop;
+    }
+
+
+
+
+
     public Student() {}
 
     public Student(String name, String email) {

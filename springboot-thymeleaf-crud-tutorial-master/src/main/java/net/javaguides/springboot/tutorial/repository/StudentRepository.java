@@ -9,7 +9,6 @@ import net.javaguides.springboot.tutorial.entity.Student;
 
 @Repository
 public interface StudentRepository extends CrudRepository<Student, Long> {
-    
     List<Student> findByName(String name);
     
 }
