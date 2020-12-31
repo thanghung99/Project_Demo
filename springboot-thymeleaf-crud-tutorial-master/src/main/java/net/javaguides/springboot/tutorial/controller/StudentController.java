@@ -35,6 +35,7 @@ public class StudentController {
 
 	@GetMapping("signup")
 	public String showSignUpForm(Student student,Model model) {
+
 		if(count==1) {
 			Lop l1 = new Lop();
 
@@ -63,13 +64,16 @@ public class StudentController {
 	}
 	static int count=1;
 
-
+	/*@Valid String id*/
 	@PostMapping("add")
-	public String addStudent(@Valid Student student, BindingResult result, Model model) {
+	public String addStudent(@Valid Student student,BindingResult result, Model model) {
+
 		if (result.hasErrors()) {
 			return "add-student";
 		}
+
 		student.getLop().getNameLop();
+
 		studentRepository.save(student);
 		return "redirect:list";
 	}
@@ -78,6 +82,12 @@ public class StudentController {
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
 		Student student = studentRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
+		List<Lop> Lops = new ArrayList<>();
+
+		for(Lop l : lopRepository.findAll())
+			if(student.getLop().getId()!=l.getId())
+			Lops.add(l);
+		model.addAttribute("List",Lops);
 		model.addAttribute("student", student);
 		return "update-student";
 	}

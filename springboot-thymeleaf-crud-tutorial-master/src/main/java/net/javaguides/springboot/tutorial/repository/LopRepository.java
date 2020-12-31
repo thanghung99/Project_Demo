@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface LopRepository extends CrudRepository<Lop,Long> {
 
-
+  Lop findById (long id);
 }
