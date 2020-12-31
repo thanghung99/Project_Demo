@@ -2,6 +2,7 @@ package net.javaguides.springboot.tutorial.controller;
 
 import javax.validation.Valid;
 
+import net.javaguides.springboot.tutorial.Service.LopService;
 import net.javaguides.springboot.tutorial.entity.Lop;
 import net.javaguides.springboot.tutorial.repository.LopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,24 +33,10 @@ public class StudentController {
 
 	@Autowired
 	private  LopRepository lopRepository;
-
+	@Autowired private LopService lopService;
 	@GetMapping("signup")
 	public String showSignUpForm(Student student,Model model) {
 
-		if(count==1) {
-			Lop l1 = new Lop();
-
-			l1.setNameLop("A");
-
-			Lop l2 = new Lop();
-
-			l2.setNameLop("B");
-
-
-			lopRepository.save(l1);
-			lopRepository.save(l2);
-			count++;
-		}
 		List<Lop> Lops = new ArrayList<>();
 		for(Lop l : lopRepository.findAll())
 			Lops.add(l);
@@ -62,7 +49,7 @@ public class StudentController {
 		model.addAttribute("students", studentRepository.findAll());
 		return "index";
 	}
-	static int count=1;
+
 
 	/*@Valid String id*/
 	@PostMapping("add")

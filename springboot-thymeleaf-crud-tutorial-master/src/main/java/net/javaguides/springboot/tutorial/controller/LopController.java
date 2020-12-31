@@ -1,5 +1,6 @@
 package net.javaguides.springboot.tutorial.controller;
 
+import net.javaguides.springboot.tutorial.Service.LopService;
 import net.javaguides.springboot.tutorial.entity.Lop;
 import net.javaguides.springboot.tutorial.entity.Student;
 import net.javaguides.springboot.tutorial.repository.LopRepository;
@@ -19,26 +20,14 @@ import java.util.List;
 
 @Controller
 public class LopController {
-    static int count= 1;
+   @Autowired private LopService lopService;
    @Autowired
      private LopRepository lopRepository;
     @Autowired private StudentRepository studentRepository;
-@GetMapping("/Lop")
+
+    @GetMapping("/Lop")
     public String showLop(Model model){
-    if(count==1) {
-        Lop l1 = new Lop();
 
-        l1.setNameLop("A");
-
-        Lop l2 = new Lop();
-
-        l2.setNameLop("B");
-
-
-        lopRepository.save(l1);
-        lopRepository.save(l2);
-        count++;
-    }
     List<Lop> Lops = new ArrayList<>();
     for(Lop l : lopRepository.findAll())
         Lops.add(l);
@@ -76,36 +65,13 @@ public class LopController {
         model.addAttribute("lop", lop);
         return "update-lop";
     }
-    @PostMapping("/Lop/delete/{id}")
-    public String deletelop(@PathVariable("id") long id,Model model){
-//    int count =0;
-//        for(Student st : studentRepository.findAll()){
-//            if(st.getLop().getId()==id){
-//                count++;
-//                return "redirect:/Student/list";
-//            }
-//        }
 
-            Lop l = lopRepository.findById(id);
-      //          if(count==0)
-                  lopRepository.delete(l);
-
-    return "redirect:/Lop";
-    }
     @GetMapping("/Lop/delete/{id}")
     public String showDeleteLop(@PathVariable("id") long id,Model model){
-        int count =0;
-        for(Student st : studentRepository.findAll()){
-            if(st.getLop().getId()==id){
-                count++;
-                return "redirect:/Student/list";
-            }
-        }
-    
-        Lop l = lopRepository.findById(id);
-                 if(count==0)
-        lopRepository.delete(l);
-
+    //neu lop con hoc sinh thi phai xoa het hs roi moi dc xoa lop
+        if(lopService.deleteLop(id))
         return "redirect:/Lop";
+        else
+            return "redirect:/students/list";
     }
 }
