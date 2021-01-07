@@ -9,21 +9,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LopService {
-    @Autowired private LopRepository lopRepository;
-    @Autowired private StudentRepository studentRepository;
+    @Autowired
+    private LopRepository lopRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
-    public boolean deleteLop(long id){
-        int count =0;
-        boolean kq=true;
-        for(Student st : studentRepository.findAll()){
-            if(st.getLop().getId()==id){
-                count++;
-               kq= false;
+    public boolean deleteLop(long id) {
+
+        boolean kq = true;
+        for (Student st : studentRepository.findAll()) {
+            if (st.getLop().getId() == id) {
+                kq = false;
             }
         }
-        Lop l = lopRepository.findById(id);
-        if(count==0)
-            lopRepository.delete(l);
+        lopRepository.deleteById(id);
         return kq;
     }
 }

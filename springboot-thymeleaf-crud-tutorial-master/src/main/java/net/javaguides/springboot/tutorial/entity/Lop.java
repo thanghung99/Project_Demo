@@ -1,11 +1,14 @@
 package net.javaguides.springboot.tutorial.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
 public class Lop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,27 +22,5 @@ public class Lop {
     private List<Student> s = new ArrayList<>();
 
 
-    public List<Student> getS() {
-        return s;
-    }
 
-    public void setS(List<Student> s) {
-        this.s = s;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNameLop() {
-        return nameLop;
-    }
-
-    public void setNameLop(String nameLop) {
-        this.nameLop = nameLop;
-    }
 }
