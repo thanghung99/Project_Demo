@@ -49,7 +49,7 @@
 
 							<div class="form-group col-md-8">
 								<label for="phoneNo" class="col-form-label">LỚp</label>
-								<select th:field="*{id}">
+								<select th:field="*{lop.id}" >
 									<option th:each="i : ${List}" th:value="${i.id}" th:text="${i.nameLop}">
 									</option>
 								</select>

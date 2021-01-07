@@ -57,10 +57,16 @@
 									</tbody>
 								</table>
 							</div>
-
+							<a href="/students/exportcsv" class="btn btn-primary"><i
+									class="fas fa-user-plus ml-2"> CSV</i></a>
+							<a href="/students/exportpdf" class="btn btn-primary"><i
+									class="fas fa-user-plus ml-2"> PDF</i></a>
 						</div>
+
 				</div>
 			</div>
+			<a class="btn btn-primary float-left"  th:href="@{/students/list(page=${currentPage} -1)}">Quay lại</a>
+			<a class="btn btn-primary float-right" th:href="@{/students/list(page=${currentPage} +1)}" >Trang Tiếp</a>
 		</div>
 	</div>
 </body>

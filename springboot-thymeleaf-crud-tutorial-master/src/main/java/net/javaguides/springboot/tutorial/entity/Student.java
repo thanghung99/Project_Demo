@@ -1,6 +1,7 @@
 package net.javaguides.springboot.tutorial.entity;
 
 
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Entity
+@Data
 public class Student {
     
     @Id
@@ -31,54 +33,11 @@ public class Student {
     @JoinColumn(name = "id_lop")
     private Lop lop;
 
-    public Lop getLop() {
-        return lop;
-    }
-
-    public void setLop(Lop lop) {
-        this.lop = lop;
-    }
-
-
-
-
-
-    public Student() {}
-
-    public Student(String name, String email) {
-        this.name = name;
-        this.email = email;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+public  void a(){
     
-    public long getId() {
-        return id;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
+}
 
-    public String getName() {
-        return name;
-    }
 
-    public String getEmail() {
-        return email;
-    }
 
-	public long getPhoneNo() {
-		return phoneNo;
-	}
 
-	public void setPhoneNo(long phoneNo) {
-		this.phoneNo = phoneNo;
-	}
 }
