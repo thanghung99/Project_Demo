@@ -1,19 +1,13 @@
-package net.javaguides.springboot.tutorial.Service;
+package net.javaguides.springboot.tutorial.service;
 
 import net.javaguides.springboot.tutorial.model.SimpleReportExporter;
 import net.javaguides.springboot.tutorial.model.SimpleReportFiller;
-import net.sf.jasperreports.engine.*;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+
 import java.util.HashMap;
 import java.util.Map;
 @Service

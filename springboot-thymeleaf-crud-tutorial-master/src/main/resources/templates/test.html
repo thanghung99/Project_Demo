@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+          crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lop : ${lops}">
+        <td th:text="${lop.id}"></td>
+        <td th:text="${lop.nameLop}"></td>
+
+    </tr>
+    </tbody>
+</table>
+
+<!-- customers pagination -->
+<nav aria-label="Pagination" th:if="${lops.totalPages gt 0}">
+    <ul class="pagination justify-content-center font-weight-medium">
+        <li class="page-item" th:classappend="${lops.number eq 0} ? 'disabled'">
+            <a class="page-link svg-icon"
+               th:href="@{/lops?page={id}(id=${lops.number lt 2 ? 1 : lops.number})}"
+               aria-label="Previous"
+               title="Previous Page" rel="tooltip">
+                <span aria-hidden="true" data-feather="chevrons-left" width="20" height="20">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" th:classappend="${i eq lops.number + 1} ? 'active'"
+            th:each="i : ${#numbers.sequence( lops.number + 1, lops.totalPages > 10 + lops.number ? lops.number + 10 : lops.totalPages, 1)}">
+            <a class="page-link" th:href="@{/lops?page={id}(id=${i})}" th:text="${i}"
+               th:title="${'Page '+ i}"
+               rel="tooltip"></a>
+        </li>
+        <li class="page-item disabled" th:if="${lops.number + 10 < lops.totalPages}">
+            <a class="page-link svg-icon" href="#">
+                <span data-feather="more-horizontal" width="20" height="20"></span>
+            </a>
+        </li>
+        <li class="page-item" th:classappend="${lops.number + 1 eq lops.totalPages} ? 'disabled'">
+            <a class="page-link " th:href="@{/lops?page={id}(id=${lops.number + 2})}"
+               aria-label="Next"
+               title="Next Page" rel="tooltip">
+                <span aria-hidden="true" data-feather="chevrons-right" width="20" height="20">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

@@ -14,12 +14,20 @@
 	integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
 	crossorigin="anonymous">
 <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
-	<link rel="stylesheet" href="../css/main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<div >
+
+</div>
 	<div class="container my-2">
 		<div class="card">
+
 			<div class="card-body">
+				<form action="#" th:action="@{/students/list/search}"   method="get">
+					<input type="text"  placeholder="search...." th:name="search">
+					<button type="submit">Search</button>
+				</form>
 				<div th:switch="${students}" class="container my-5">
 					<p class="my-5">
 						<a href="/students/signup" class="btn btn-primary"><i
@@ -51,7 +59,7 @@
 											<td><a th:href="@{/students/edit/{id}(id=${student.id})}"
 												class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
 											<td><a
-												th:href="@{/students/delete/{id}(id=${student.id})}"
+												  th:onclick="'Delete.student(\''+${student.id}+ '\')'	"
 												class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
 										</tr>
 									</tbody>
@@ -65,9 +73,49 @@
 
 				</div>
 			</div>
-			<a class="btn btn-primary float-left"  th:href="@{/students/list(page=${currentPage} -1)}">Quay lại</a>
-			<a class="btn btn-primary float-right" th:href="@{/students/list(page=${currentPage} +1)}" >Trang Tiếp</a>
+			<div th:switch="${currentPage}">
+				<div th:case="null">
+
+				</div>
+				<div th:case="*">
+					<a class="btn btn-primary float-left"  th:href="@{/students/list(page=${currentPage} -1)}">Quay lại</a>
+					<a class="btn btn-primary float-right" th:href="@{/students/list(page=${currentPage} +1)}" >Trang Tiếp</a>
+				</div>
+			</div>
+
 		</div>
 	</div>
+
+<script type="text/javascript">
+	var Delete = {
+	student: function (id) {
+		var dataSendToBackEnd = {};
+		dataSendToBackEnd["id"] = id;
+
+		var jsonString = JSON.stringify(dataSendToBackEnd);
+		// call ajax
+		$.ajax({
+			url: "/students/api/delete",
+			type: "post",
+			contentType: "application/json", // dữ liệu gửi lên web-service có dạng là json.
+			data: JSON.stringify(dataSendToBackEnd), // object json -> string json
+
+			dataType: "json", // dữ liệu từ web-service trả về là json.
+			success: function (jsonResult) { // được gọi khi web-service trả về dữ liệu.
+				if (jsonResult.statusCode==200)
+					alert(jsonResult.data);
+			}
+		});
+	}
+
+
+
+
+}
+
+
+
+
+</script>
 </body>
 </html>

@@ -1,0 +1,32 @@
+2021-01-08 17:39:15,621 INFO o.s.b.StartupInfoLogger [restartedMain] Starting Application on OMS-PC-059 with PID 1008 (D:\Dowload_GIT\Project_Demo\springboot-thymeleaf-crud-tutorial-master\target\classes started by thangnh02 in D:\Dowload_GIT\Project_Demo\springboot-thymeleaf-crud-tutorial-master)
+2021-01-08 17:39:15,632 INFO o.s.b.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2021-01-08 17:39:15,696 INFO o.s.b.l.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-01-08 17:39:15,696 INFO o.s.b.l.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-01-08 17:39:16,559 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data repositories in DEFAULT mode.
+2021-01-08 17:39:16,644 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 77ms. Found 2 repository interfaces.
+2021-01-08 17:39:17,072 INFO o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [restartedMain] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$a8257e82] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 17:39:17,616 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat initialized with port(s): 8080 (http)
+2021-01-08 17:39:17,634 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing ProtocolHandler ["http-nio-8080"]
+2021-01-08 17:39:17,649 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting service [Tomcat]
+2021-01-08 17:39:17,650 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting Servlet engine: [Apache Tomcat/9.0.17]
+2021-01-08 17:39:17,895 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing Spring embedded WebApplicationContext
+2021-01-08 17:39:17,896 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 2200 ms
+2021-01-08 17:39:18,134 INFO o.h.j.i.u.LogHelper [restartedMain] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2021-01-08 17:39:18,200 INFO o.h.Version [restartedMain] HHH000412: Hibernate Core {5.3.9.Final}
+2021-01-08 17:39:18,202 INFO o.h.c.Environment [restartedMain] HHH000206: hibernate.properties not found
+2021-01-08 17:39:18,349 INFO o.h.a.c.r.j.JavaReflectionManager [restartedMain] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2021-01-08 17:39:18,495 INFO c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Starting...
+2021-01-08 17:39:18,870 INFO c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
+2021-01-08 17:39:18,886 INFO o.h.d.Dialect [restartedMain] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2021-01-08 17:39:19,293 INFO o.h.e.j.e.i.LobCreatorBuilderImpl [restartedMain] HHH000421: Disabling contextual LOB creation as hibernate.jdbc.lob.non_contextual_creation is true
+2021-01-08 17:39:19,310 INFO o.h.t.BasicTypeRegistry [restartedMain] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@2f7552b4
+2021-01-08 17:39:20,507 INFO o.s.o.j.AbstractEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-01-08 17:39:20,553 INFO o.s.b.d.a.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-01-08 17:39:21,236 INFO o.s.s.c.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'applicationTaskExecutor'
+2021-01-08 17:39:21,278 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-08 17:39:21,451 INFO o.s.b.a.w.s.WelcomePageHandlerMapping [restartedMain] Adding welcome page template: index
+2021-01-08 17:39:21,615 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting ProtocolHandler ["http-nio-8080"]
+2021-01-08 17:39:21,831 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat started on port(s): 8080 (http) with context path ''
+2021-01-08 17:39:21,835 INFO o.s.b.StartupInfoLogger [restartedMain] Started Application in 7.109 seconds (JVM running for 9.334)
