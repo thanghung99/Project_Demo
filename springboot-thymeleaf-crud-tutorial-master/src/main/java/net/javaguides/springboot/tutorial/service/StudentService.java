@@ -1,7 +1,7 @@
-package net.javaguides.springboot.tutorial.Service;
+package net.javaguides.springboot.tutorial.service;
 
-import com.querydsl.core.support.QueryBase;
 import com.querydsl.jpa.impl.JPAQuery;
+import net.javaguides.springboot.tutorial.entity.QLop;
 import net.javaguides.springboot.tutorial.entity.QStudent;
 import net.javaguides.springboot.tutorial.entity.Student;
 import net.javaguides.springboot.tutorial.repository.LopRepository;
@@ -10,7 +10,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +24,14 @@ public class StudentService {
     @Autowired private StudentRepository studentRepository;
     @PersistenceContext protected EntityManager entityManager;
     private final int LIMIT =2;
+    public List<Student> search(String name){
+        QStudent student = QStudent.student;
+        JPAQuery<Student> query = new JPAQuery<>(entityManager);
+        JPAQuery<Student> from = query.from(student);
+        from.where(student.name.likeIgnoreCase("%"+name+"%"));
+        return query.fetch();
+    }
+
     public  void createCSVFile() throws IOException{
 
         try {
@@ -47,15 +54,23 @@ public class StudentService {
         query.setMaxResults(LIMIT);
         return query.getResultList();
     }
-    public void search(long id, String name,String email,long phone){
-        QStudent qStudent = QStudent.student;
+    public List<Student> search(long id, String name,String email,long phone){
+//        QStudent qStudent = QStudent.student;
+////        JPAQuery<Student> query = new JPAQuery(entityManager);
+////        JPAQuery<Student> from = query.from(qStudent);
+////        if (!StringUtils.isEmpty(name)) {
+////            from.where(qStudent.name.contains(name));
+////        }
+////        JPAQuery<Student> studentJPAQuery = from.where(qStudent.id.eq(id));
+////        studentJPAQuery.fetch();
+      //  String sql =" select * from Student where";
+        QStudent student = QStudent.student;
+        QLop lop = QLop.lop;
+
         JPAQuery<Student> query = new JPAQuery(entityManager);
-        JPAQuery<Student> from = query.from(qStudent);
-        if (!StringUtils.isEmpty(name)) {
-            from.where(qStudent.name.contains(name));
-        }
-        JPAQuery<Student> studentJPAQuery = from.where(qStudent.id.eq(id));
-        studentJPAQuery.fetch();
-        String sql =" select * from Student where";
+        JPAQuery<Student> from = query.from(student);
+        from.where(student.name.contains(name).or(student.id.eq(id)).or(student.phoneNo.eq(phone).or(student.email.eq(email))));
+
+        return from.fetch();
     }
 }

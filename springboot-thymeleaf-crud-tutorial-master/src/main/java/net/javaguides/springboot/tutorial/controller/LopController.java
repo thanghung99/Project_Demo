@@ -1,23 +1,24 @@
 package net.javaguides.springboot.tutorial.controller;
 
-import net.javaguides.springboot.tutorial.Service.LopService;
+import net.javaguides.springboot.tutorial.service.LopService;
 import net.javaguides.springboot.tutorial.entity.Lop;
-import net.javaguides.springboot.tutorial.entity.Student;
-import net.javaguides.springboot.tutorial.model.ExportPDF;
 import net.javaguides.springboot.tutorial.repository.LopRepository;
 import net.javaguides.springboot.tutorial.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Controller
 public class LopController {
@@ -28,7 +29,23 @@ public class LopController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @GetMapping("/lops")
+    public String customersPage(HttpServletRequest request, Model model) {
 
+        int page = 0; //default page number is 0 (yes it is weird)
+        int size = 1 ; //default page size is 10
+
+        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
+            page = Integer.parseInt(request.getParameter("page")) - 1;
+        }
+
+//        if (request.getParameter("size") != null && !request.getParameter("size").isEmpty()) {
+//            size = Integer.parseInt(request.getParameter("size"));
+//        }
+
+        model.addAttribute("lops", lopRepository.findAll(PageRequest.of(page, size)));
+        return "test";
+    }
     @GetMapping("/Lop")
     public String showLop(Model model) {
 

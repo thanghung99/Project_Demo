@@ -1,6 +1,5 @@
-package net.javaguides.springboot.tutorial.Service;
+package net.javaguides.springboot.tutorial.service;
 
-import net.javaguides.springboot.tutorial.entity.Lop;
 import net.javaguides.springboot.tutorial.entity.Student;
 import net.javaguides.springboot.tutorial.repository.LopRepository;
 import net.javaguides.springboot.tutorial.repository.StudentRepository;

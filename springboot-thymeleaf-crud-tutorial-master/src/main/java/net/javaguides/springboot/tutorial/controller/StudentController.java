@@ -1,38 +1,31 @@
 package net.javaguides.springboot.tutorial.controller;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import net.javaguides.springboot.tutorial.Service.ExportPDFService;
-import net.javaguides.springboot.tutorial.Service.LopService;
-import net.javaguides.springboot.tutorial.Service.StudentService;
+import net.javaguides.springboot.tutorial.service.ExportPDFService;
+import net.javaguides.springboot.tutorial.service.LopService;
+import net.javaguides.springboot.tutorial.service.StudentService;
 import net.javaguides.springboot.tutorial.entity.Lop;
-import net.javaguides.springboot.tutorial.model.ExportPDF;
+import net.javaguides.springboot.tutorial.model.ApiRespone;
 import net.javaguides.springboot.tutorial.repository.LopRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import net.javaguides.springboot.tutorial.entity.Student;
 import net.javaguides.springboot.tutorial.repository.StudentRepository;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,133 +33,151 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/students/")
+
 public class StudentController {
-	final Logger log = LoggerFactory.getLogger(this.getClass());
-	@Autowired
-	private StudentService studentService;
-	private final StudentRepository studentRepository;
-	@Autowired
-	private ExportPDFService exportPDF;
 
-	//	@Autowired
-	public StudentController(StudentRepository studentRepository) {
-		this.studentRepository = studentRepository;
-	}
 
-	@Autowired
-	private LopRepository lopRepository;
-	@Autowired
-	private LopService lopService;
+    private static final  Logger log = LoggerFactory.getLogger(StudentController.class);
+    @Autowired
+    private StudentService studentService;
+    private final StudentRepository studentRepository;
+    @Autowired
+    private ExportPDFService exportPDF;
 
-	@GetMapping("signup")
-	public String showSignUpForm(Student student, Model model) {
+    //	@Autowired
+    public StudentController(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
-		List<Lop> Lops = new ArrayList<>();
-		for (Lop l : lopRepository.findAll())
-			Lops.add(l);
-		model.addAttribute("List", Lops);
-		return "add-student";
-	}
+    @Autowired
+    private LopRepository lopRepository;
+    @Autowired
+    private LopService lopService;
 
-	@GetMapping("list")
-	public String showUpdateForm(Model model, HttpServletRequest request) {
+    @GetMapping("signup")
+    public String showSignUpForm(Student student, Model model) {
 
-		int max = 2;
-		for (Student t : studentRepository.findAll())
-			max++;
-		int pageNumber = 1;
-		if (request.getParameter("page") != null) {
-			pageNumber = Integer.valueOf(request.getParameter("page"));
-			if (pageNumber < 1) pageNumber = 1;
-			if (pageNumber > max / 2) pageNumber = pageNumber - 1;
-		}
+        List<Lop> Lops = new ArrayList<>();
+        for (Lop l : lopRepository.findAll())
+            Lops.add(l);
+        model.addAttribute("List", Lops);
+        return "add-student";
+    }
 
-		model.addAttribute("students", studentService.getAllStudents(pageNumber));
-		model.addAttribute("currentPage", pageNumber);
-		return "index";
-	}
+    @PostMapping("api/delete")
+    public ResponseEntity<ApiRespone> apiXoaStudent(@RequestBody final Map<String, Object> id) {
+        String str = (String) id.get("id");
 
-	/////// Export CSV Student
-	@GetMapping("exportcsv")
-	public String exportCSV() throws IOException {
 
-		studentService.createCSVFile();
-		return "redirect:list";
-	}
+        studentRepository.deleteById(Long.parseLong(str));
 
-	////////
-	@GetMapping("exportpdf")
-	public String exportPDF(HttpServletResponse response) throws JRException {
-		try {
-			String sourceFileName = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "temp.jrxml").getAbsolutePath();
+        return ResponseEntity.ok(new ApiRespone(200, "Xoa thanh cong"));
+    }
 
-			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(lopRepository.findAll());
-			Map parameters = new HashMap();
-			JasperPrint jasperPrint = JasperFillManager.fillReport(sourceFileName, parameters, beanColDataSource);
 
-			JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-			response.setContentType("application/pdf");
-			response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
-			//createPdfReport(lopRepository.findAll());
-			log.info("File successfully saved at the given path.");
-		}
-		catch (final Exception e) {
-			log.error("Some error has occured while preparing the employee pdf report.");
+    @GetMapping("list")
+    public String showUpdateForm(Model model, HttpServletRequest request) {
 
-			e.printStackTrace();
-		}
-		return "redirect:list";
-	}
+        int max = 2;
+        for (Student t : studentRepository.findAll())
+            max++;
+        int pageNumber = 1;
+        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
+            pageNumber = Integer.valueOf(request.getParameter("page"));
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageNumber > max / 2) pageNumber = pageNumber - 1;
+        }
 
-	/*@Valid String id*/
-	@PostMapping("add")
-	public String addStudent(@Valid Student student, BindingResult result, Model model) {
+        model.addAttribute("students", studentService.getAllStudents(pageNumber));
+        model.addAttribute("currentPage", pageNumber);
+        return "index";
+    }
 
-		if (result.hasErrors()) {
-			return "add-student";
-		}
+    /////// Export CSV Student
+    @GetMapping("exportcsv")
+    public String exportCSV() throws IOException {
 
-		student.getLop().getNameLop();
+        studentService.createCSVFile();
+		log.info("File successfully saved at the given path.");
+        return "redirect:list";
+    }
 
-		studentRepository.save(student);
-		return "redirect:list";
-	}
+    ////////
+    @GetMapping("exportpdf")
+    public String exportPDF(HttpServletResponse response) throws JRException {
+        try {
+            String sourceFileName = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "temp.jrxml").getAbsolutePath();
 
-	@GetMapping("edit/{id}")
-	public String showUpdateForm(@PathVariable("id") long id, Model model) {
-		Student student = studentRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
-		List<Lop> Lops = new ArrayList<>();
+            JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(lopRepository.findAll());
+            Map parameters = new HashMap();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(sourceFileName, parameters, beanColDataSource);
 
-		for (Lop l : lopRepository.findAll())
-			if (student.getLop().getId() != l.getId())
-				Lops.add(l);
-		model.addAttribute("List", Lops);
-		model.addAttribute("student", student);
-		return "update-student";
-	}
+            JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+            response.setContentType("application/pdf");
+            response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
+            //createPdfReport(lopRepository.findAll());
+            log.info("File successfully saved at the given path.");
+        } catch (final Exception e) {
+          //  log.error("Some error has occured while preparing the employee pdf report.");
+            log.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return "redirect:list";
+    }
 
-	@PostMapping("update/{id}")
-	public String updateStudent(@PathVariable("id") long id, @Valid Student student, BindingResult result,
-								Model model) {
-		if (result.hasErrors()) {
-			student.setId(id);
-			return "update-student";
-		}
+    /*@Valid String id*/
+    @PostMapping("add")
+    public String addStudent(@Valid Student student, BindingResult result, Model model) {
 
-		studentRepository.save(student);
-		model.addAttribute("students", studentRepository.findAll());
-		return "index";
-	}
+        if (result.hasErrors()) {
+            return "add-student";
+        }
 
-	@GetMapping("delete/{id}")
-	public String deleteStudent(@PathVariable("id") String id, Model model) {
+        student.getLop().getNameLop();
 
-		studentRepository.deleteById(Long.parseLong(id));
+        studentRepository.save(student);
+        return "redirect:list";
+    }
 
-		return "redirect:/students/list";
-	}
+    @GetMapping("edit/{id}")
+    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
+        List<Lop> Lops = new ArrayList<>();
 
+        for (Lop l : lopRepository.findAll())
+            if (student.getLop().getId() != l.getId())
+                Lops.add(l);
+        model.addAttribute("List", Lops);
+        model.addAttribute("student", student);
+        return "update-student";
+    }
+
+    @PostMapping("update/{id}")
+    public String updateStudent(@PathVariable("id") long id, @Valid Student student, BindingResult result,
+                                Model model) {
+        if (result.hasErrors()) {
+            student.setId(id);
+            return "update-student";
+        }
+
+        studentRepository.save(student);
+        model.addAttribute("students", studentRepository.findAll());
+        return "add-student";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteStudent(@PathVariable("id") String id, Model model) {
+        studentRepository.deleteById(Long.parseLong(id));
+        return "redirect:/students/list";
+    }
+
+    @GetMapping("list/search")
+    public String search(Model model, @RequestParam(value = "search") String search) {
+        model.addAttribute("students", studentService.search(search));
+        model.addAttribute("currentPage", null);
+        return "index";
+    }
 //	private void createPdfReport(final List<Lop> employees) throws JRException {
 //		// Fetching the .jrxml file from the resources folder.
 //		final InputStream stream = this.getClass().getResourceAsStream("/templates/report.jrxml");
